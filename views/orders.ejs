@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Orders</title>
+</head>
+
+<style>
+    #flexbox {
+        display: flex;
+        flex-direction: row;
+        gap: 1%;
+        width: 100%;
+    }
+    .Orders {
+        background-color: gray;
+        border-radius: 15px;
+        flex-direction: column;
+        margin: 1%;
+    }
+    .CompletedOrders {
+        background-color: gray;
+        border-radius: 15px;
+        flex-direction: column;
+        margin: 1%;
+    }
+    .customer {
+        background-color: darkgray;
+        border-radius: 15px;
+        padding: 5px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 1%;
+        padding: 1%;
+    }
+    h1 {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+    }
+    .SearchOrders { 
+        background-color: gray;
+        border-radius: 15px;
+        padding: 1%;
+        margin: 1%;
+    }
+    .searchbox {
+        background-color: darkgray;
+        border-radius: 15px;
+        text-align: center;
+        
+    }
+
+</style>
+
+<body>
+    <div id="flexbox">
+    <div class="Orders">
+        <h1>All Orders:</h1>
+            <% for (let currItem of CustomerList) { %>
+                <div class="customer">
+                    <h2>Customer Name: <%= currItem.customer_name %></h2>
+                    <p>Address: <%= currItem.address %></p>
+                    <p>Items: <%= currItem.item %></p>
+                    <p>Total Price: <%= "$" + currItem.price %></p>
+                    <p>Date: <%= currItem.orderDate + " , " + currItem.orderTime %></p>
+                    <h2>Assigned Driver: <%= currItem.driverName %></h2>
+                    <p>Driver's License: <%= currItem.driverLicense %></p>
+                    <p>Order Status: <%= currItem.orderStatus %></p>
+                    <form method="POST" action = "/modify/<%= currItem._id %>">
+                        <select name="neworderstatus" onchange="this.form.submit();">
+                            <option value="Change Order Status">Change Order Status:</option>
+                            <option value="Preparing Order">Preparing Order</option>
+                            <option value="Waiting for Driver">Waiting for Driver</option>
+                            <option value="In Transit">In Transit</option>
+                            <option value="Delivered">Delivered</option>
+                        </select>
+                    </form>
+                </br>
+                    <% if (currItem.orderStatus === "Delivered"){ %>
+                        <img src = <%= currItem.deliveredimg %>/>
+                    <% } %>
+                    </br>
+                </div>
+                
+            <% } %>
+
+    </div>
+    <div class="SearchOrders"> 
+        <h1>Search for Orders from a Customer:</h1>
+        <div id="searchbox">
+        <form method="POST" action="/search">
+            <input type="text" name="searchcustomer" placeholder="Enter name of customer"/>
+            <button>Search for Customer</button>
+        </form>
+        </div>
+        <% for (let currItem of SearchList) { %>
+            <div class="customer">
+                <h2>Customer Name: <%= currItem.customer_name %></h2>
+                <p>Address: <%= currItem.address %></p>
+                <p>Items: <%= currItem.item %></p>
+                <p>Total Price: <%= "$" + currItem.price %></p>
+                <p>Date: <%= currItem.orderDate + " , " + currItem.orderTime %></p>
+                <h2>Assigned Driver: <%= currItem.driverName %></h2>
+                <p>Driver's License: <%= currItem.driverLicense %></p>
+                <p>Order Status: <%= currItem.orderStatus %></p>
+                <form method="POST" action = "/modify/<%= currItem._id %>">
+                    <select name="neworderstatus" onchange="this.form.submit();">
+                        <option value="Change Order Status">Change Order Status:</option>
+                        <option value="Preparing Order">Preparing Order</option>
+                        <option value="Waiting for Driver">Waiting for Driver</option>
+                        <option value="In Transit">In Transit</option>
+                        <option value="Delivered">Delivered</option>
+                    </select>
+                </form>
+                <% if (currItem.orderStatus === "Delivered"){ %>
+                    <img src = <%= currItem.deliveredimg %>/>
+                <% } %>
+            </div>
+       <% } %>
+    </div>
+    <div class="CompletedOrders">
+        <h1>Completed Orders</h1>
+        <% for (let currItem of CustomerList) { %>
+            <% if (currItem.orderStatus === "Delivered"){ %>
+                <div class="customer">
+                    <h2>Customer Name: <%= currItem.customer_name %></h2>
+                    <p>Address: <%= currItem.address %></p>
+                    <p>Items: <%= currItem.item %></p>
+                    <p>Total Price: <%= "$" + currItem.price %></p>
+                    <p>Date: <%= currItem.orderDate + " , " + currItem.orderTime %></p>
+                    <h2>Assigned Driver: <%= currItem.driverName %></h2>
+                    <p>Driver's License: <%= currItem.driverLicense %></p>
+                    <p>Order Status: <%= currItem.orderStatus %></p>
+                    <img src = <%= currItem.deliveredimg %>/>
+                </div>
+                <% } %>
+        <% } %>
+    </div>
+    </div>
+</body>
+</html>
